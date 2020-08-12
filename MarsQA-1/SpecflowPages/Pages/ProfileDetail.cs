@@ -15,8 +15,22 @@ namespace MarsQA_1.SpecflowPages.Pages
 {
     public class ProfileDetail
     {
+        private static IWebElement addNewLanguageBtn => Driver.driver.FindElement(By.XPath(" (//div[@class='ui teal button '][contains(text(),'Add New')])[1]"));
+        private static IWebElement addNewLanguageTxt => Driver.driver.FindElement(By.XPath(" //input[contains(@placeholder,'Add Language')]"));
+        private static IWebElement LanguageLevelDrpdwn => Driver.driver.FindElement(By.XPath(" //select[contains(@class,'ui dropdown')]"));
+        private static IWebElement addButton_Langauge => Driver.driver.FindElement(By.XPath(" //input[@class='ui teal button'][contains(@value, 'Add')]"));
+        private static IWebElement deleteLanguageBtn => Driver.driver.FindElement(By.XPath(" (//i[contains(@class,'remove icon')])[1]"));
+        private static IWebElement educationTab => Driver.driver.FindElement(By.XPath("//a[@class='item'][contains(.,'Education')]"));
+        private static IWebElement addNewButton_Education => Driver.driver.FindElement(By.XPath("(//div[@class='ui teal button '][contains(.,'Add New')])[2]"));
+        private static IWebElement collegeNameTextbox => Driver.driver.FindElement(By.XPath("//input[contains(@placeholder,'College/University Name')]"));
+        private static IWebElement degreeTextbox => Driver.driver.FindElement(By.XPath("//input[contains(@placeholder,'Degree')]"));
+        private static IWebElement addButton_Education => Driver.driver.FindElement(By.XPath("//input[contains(@class,'ui teal button ')]"));
+        private static IWebElement countryDropdown => Driver.driver.FindElement(By.XPath("//select[contains(@name,'country')]"));
+        private static IWebElement titleDropdown => Driver.driver.FindElement(By.XPath("//select[contains(@name,'title')]"));
+        private static IWebElement yearDropdown => Driver.driver.FindElement(By.XPath("//select[contains(@name,'yearOfGraduation')]"));
+        private static IWebElement editEducationButton => Driver.driver.FindElement(By.XPath("(//i[contains(@class,'outline write icon')])[5]"));
+        private static IWebElement updateEducationButton => Driver.driver.FindElement(By.XPath("//input[contains(@value,'Update')]"));
 
-       
         public void AddLanguage()
         {
 
@@ -27,27 +41,22 @@ namespace MarsQA_1.SpecflowPages.Pages
             {
 
                 //Reading language data from excel sheet
-                ExcelLibHelper.PopulateInCollection(@"MarsQA-1\SpecflowTests\Data\Data.xlsx", "Language");
+                ExcelLibHelper.PopulateInCollection(ConstantHelpers.Excelpath_LanguageData, "Language");
                 var languageData = ExcelLibHelper.ReadData(i + 1, "Language");
                 
                 //Clicking on Add new button
-                IWebElement addNewLanguageBtn = Driver.driver.FindElement(By.XPath(" (//div[@class='ui teal button '][contains(text(),'Add New')])[1]"));
                 addNewLanguageBtn.Click();
 
                 //Entering the language data into the language textbox
-                IWebElement addNewLanguageTxt = Driver.driver.FindElement(By.XPath(" //input[contains(@placeholder,'Add Language')]"));
                 addNewLanguageTxt.SendKeys(languageData);
 
                 //Selecting the language level
-                IWebElement LanguageLevelDrpdwn = Driver.driver.FindElement(By.XPath(" //select[contains(@class,'ui dropdown')]"));
                 SelectElement chooseLanguageLevel = new SelectElement(LanguageLevelDrpdwn);
-                //select.SelectByText(ConstantHelpers.LevelFluent);
                 var languageLevelData = ExcelLibHelper.ReadData(i + 1, "LanguageLevel");
                 chooseLanguageLevel.SelectByValue(languageLevelData);
 
                 //Clicking Add button
-                IWebElement addButton = Driver.driver.FindElement(By.XPath(" //input[@class='ui teal button'][contains(@value, 'Add')]"));
-                addButton.Click();
+                addButton_Langauge.Click();
             }
         }
 
@@ -56,72 +65,64 @@ namespace MarsQA_1.SpecflowPages.Pages
         public void DeleteLanguage()
         {
             //Delete an existing language from the language list 
-            IWebElement deleteLanguageBtn = Driver.driver.FindElement(By.XPath(" (//i[contains(@class,'remove icon')])[1]"));
             deleteLanguageBtn.Click();
-            IWebElement DeleteAlertPopup = Driver.driver.FindElement(By.ClassName("ns-box-inner"));
-            String ExpectedAlertText = DeleteAlertPopup.Text;
-            Assert.IsTrue(ExpectedAlertText.Contains("deleted"));
-
+            
 
         }
           public void AddEducation(String Year, String Country, String Title)
         //public void AddEducation()
-        {
+          {
             //Populating data from Data excel sheet and reading the test data 
-            ExcelLibHelper.PopulateInCollection(@"MarsQA-1\SpecflowTests\Data\Data.xlsx", "Education");
+            ExcelLibHelper.PopulateInCollection(ConstantHelpers.Excelpath_LanguageData, "Education");
             var collegeNametxt = ExcelLibHelper.ReadData(2, "College/University Name");
             var degreeTxt = ExcelLibHelper.ReadData(2, "Degree");
-            //var yearDrpdwn = ExcelLibHelper.ReadData(2, "Year");
+            
 
             // Clicking on the Education tab
-            IWebElement educationTab = Driver.driver.FindElement(By.XPath("//a[@class='item'][contains(.,'Education')]"));
             educationTab.Click();
 
+            GenericWait.ElementIsClickable(Driver.driver, "XPath", "(//div[@class='ui teal button '][contains(.,'Add New')])[2]", 5);
+            
             //Clicking the addNew button
-            IWebElement addNewButton = Driver.driver.FindElement(By.XPath("(//div[@class='ui teal button '][contains(.,'Add New')])[2]"));
-            addNewButton.Click();
+            addNewButton_Education.Click();
 
             //Entering the College/University name
-            IWebElement collegeNameTextbox = Driver.driver.FindElement(By.XPath("//input[contains(@placeholder,'College/University Name')]"));
             collegeNameTextbox.SendKeys(collegeNametxt);
 
             //Entering the degree
-            IWebElement degreeTextbox = Driver.driver.FindElement(By.XPath("//input[contains(@placeholder,'Degree')]"));
             degreeTextbox.SendKeys(degreeTxt);
 
             //Selecting the country
-            SelectElement countryDropdown = new SelectElement(Driver.driver.FindElement(By.XPath("//select[contains(@name,'country')]")));
-            countryDropdown.SelectByText(Country);
-            
+            SelectElement elementcountry_drpdwn = new SelectElement(countryDropdown);
+            elementcountry_drpdwn.SelectByText(Country);
+
 
             //Selecting the Title
-            SelectElement titleDropdown = new SelectElement(Driver.driver.FindElement(By.XPath("//select[contains(@name,'title')]")));
-            titleDropdown.SelectByText(Title);
-            
+            SelectElement elementtitle_drpdwn = new SelectElement(titleDropdown);
+            elementtitle_drpdwn.SelectByText(Title);
+
             //Selecting the year
-            SelectElement yearDropdown = new SelectElement(Driver.driver.FindElement(By.XPath("//select[contains(@name,'yearOfGraduation')]")));
-            yearDropdown.SelectByText(Year);
-            
+            SelectElement elementyear_drpdwn = new SelectElement(yearDropdown);
+            elementyear_drpdwn.SelectByText(Year);
+
             //Clicking add button 
-            IWebElement addButton = Driver.driver.FindElement(By.XPath("//input[contains(@class,'ui teal button ')]"));
-            addButton.Click();
-        }
+            addButton_Education.Click();
+          }
+           
 
         public void UpdateEducation(String Title)
         {
             // Clicking on the Education tab
-            IWebElement educationTab = Driver.driver.FindElement(By.XPath("//a[@class='item'][contains(.,'Education')]"));
             educationTab.Click();
 
+            GenericWait.ElementExists(Driver.driver, "XPath", "(//i[contains(@class,'outline write icon')])[5]", 5);
+            
             // Clicking on the Edit button of the added education
-            IWebElement editEducationButton = Driver.driver.FindElement(By.XPath("(//i[@class='outline write icon'])[8]"));
-            //IWebElement editEducationButton = Driver.driver.FindElement(By.XPath("/div[@class='ui bottom attached tab segment tooltip-target active']//i[@class='outline write icon']"));
             editEducationButton.Click();
 
             //Updating Title
-            SelectElement titleDropdown = new SelectElement(Driver.driver.FindElement(By.XPath("//select[contains(@name,'title')]")));
-            titleDropdown.SelectByText(Title);
-            IWebElement updateEducationButton = Driver.driver.FindElement(By.XPath("//input[contains(@value,'Update')]"));
+            SelectElement elementtitle_drpdwn= new SelectElement(titleDropdown);
+            elementtitle_drpdwn.SelectByText(Title);
             updateEducationButton.Click();
 
 

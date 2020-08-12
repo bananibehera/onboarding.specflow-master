@@ -10,15 +10,8 @@ namespace MarsQA_1.Helpers
     {
         //Base Url
         public static string Url = "http://localhost:5000";
+        public static string Excelpath_LanguageData = @"MarsQA-1\SpecflowTests\Data\Data.xlsx";
 
-        public static string LevelFluent = "Fluent";
-        public static string LevelBasic = "Basic";
-
-        public static string Xpath_Fluent = "//td[contains(.,'French')]";
-
-        public static string Country_College = "New Zealand";
-        public static string Year_Grad = "2009";
-        public static string Tile = "B.Tech";
         //ScreenshotPath
         //public static string ScreenshotPath = @"C:\Priyabrata\Ruby\Industry Connect\MarsQA\onboarding.specflow-master\MarsQA-1\TestReports\Screenshots\";
         public static string ScreenshotPath = @"MarsQA-1\TestReports\Screenshots\";
